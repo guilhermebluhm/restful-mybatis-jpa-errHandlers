@@ -45,4 +45,9 @@ public class StudentController {
     public void deleteStudent(@PathVariable int id){
         this.impl.deleteStudent(id);
     }
+
+    @PutMapping("update-student/{id}")
+    public StudentDto updateDataStudent(@PathVariable int id, @RequestBody Student student){
+        return this.impl.updateDataStudent(id,student);
+    }
 }

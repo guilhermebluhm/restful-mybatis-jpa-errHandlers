@@ -66,6 +66,17 @@ public class StudentImpl implements StudentService, StudentMapper {
     }
 
     @Override
+    public StudentDto updateDataStudent(int id, Student student) {
+        if(this.checkedExistentStudent(id)){
+            this.validateNoRegistry(student);
+            Optional<Student> byId = this.repository.findById(id);
+            Student std = this.repository.save(byId.get());
+            return new StudentDto(std);
+        }
+        throw new RuntimeException("ops...");
+    }
+
+    @Override
     public List<Student> getAllStudent() {
         return this.mapper.getAllStudent();
     }
