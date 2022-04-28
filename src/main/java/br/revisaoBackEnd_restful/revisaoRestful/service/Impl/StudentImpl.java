@@ -6,8 +6,8 @@ import br.revisaoBackEnd_restful.revisaoRestful.repository.StudentRepository;
 import br.revisaoBackEnd_restful.revisaoRestful.repository.mapper.StudentMapper;
 import br.revisaoBackEnd_restful.revisaoRestful.service.StudentService;
 import br.revisaoBackEnd_restful.revisaoRestful.service.exception.ObjectNotFoundError;
-import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -22,9 +22,10 @@ public class StudentImpl implements StudentService, StudentMapper {
     @Autowired
     StudentMapper mapper;
 
+
     @Override
-    public List<StudentDto> listAllStudents() {
-        return StudentDto.generateListDtoBasedInStudent(this.repository.findAll());
+    public List<StudentDto> listStudents(Pageable page) {
+        return StudentDto.generateListDtoBasedInStudent(this.repository.findAll(page));
     }
 
     @Override
@@ -42,7 +43,7 @@ public class StudentImpl implements StudentService, StudentMapper {
         throw new ObjectNotFoundError("student doesn't exist");
     }
 
-    private void validateNoRegistry(Student user){
+    protected void validateNoRegistry(Student user){
         Optional<Student> str = this.repository.findByRegistry(user.getRegistry());
         if(str.isPresent()){
             throw new RuntimeException("registry no accept - No. registry duplicate");
@@ -67,11 +68,11 @@ public class StudentImpl implements StudentService, StudentMapper {
 
     @Override
     public StudentDto updateDataStudent(int id, Student student) {
-        if(this.checkedExistentStudent(id)){
+        Optional<Student> byId = this.repository.findById(id);
+        if(byId.isPresent()){
             this.validateNoRegistry(student);
-            Optional<Student> byId = this.repository.findById(id);
-            Student std = this.repository.save(byId.get());
-            return new StudentDto(std);
+            byId.get().setName(student.getName());
+            return new StudentDto(this.repository.save(byId.get()));
         }
         throw new RuntimeException("ops...");
     }

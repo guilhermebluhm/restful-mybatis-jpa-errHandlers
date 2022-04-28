@@ -2,9 +2,9 @@ package br.revisaoBackEnd_restful.revisaoRestful.controller;
 
 import br.revisaoBackEnd_restful.revisaoRestful.model.Student;
 import br.revisaoBackEnd_restful.revisaoRestful.model.dto.StudentDto;
-import br.revisaoBackEnd_restful.revisaoRestful.repository.mapper.StudentMapper;
 import br.revisaoBackEnd_restful.revisaoRestful.service.Impl.StudentImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,10 +23,10 @@ public class StudentController {
         return this.impl.getAllStudent();
     }
 
-    @GetMapping("list-all-using-dto")
+    @GetMapping("list-all-using-pagination")
     @ResponseStatus(HttpStatus.OK)
-    public List<StudentDto> getAllUsingDto(){
-        return this.impl.listAllStudents();
+    public List<StudentDto> getAllUsingDto(Pageable page){
+        return this.impl.listStudents(page);
     }
 
     @GetMapping("list-all-using-dto/{id}")

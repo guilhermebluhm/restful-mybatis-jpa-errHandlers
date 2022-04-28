@@ -4,9 +4,9 @@ import br.revisaoBackEnd_restful.revisaoRestful.model.Student;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
-import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 @Getter
@@ -27,7 +27,7 @@ public class StudentDto {
        this.setName(student.getName());
     }
 
-    public static List<StudentDto> generateListDtoBasedInStudent(List<Student> student){
+    public static List<StudentDto> generateListDtoBasedInStudent(Page<Student> student){
         return student.stream().map(StudentDto::new).collect(Collectors.toList());
     }
 
