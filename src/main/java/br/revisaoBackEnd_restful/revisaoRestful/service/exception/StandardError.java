@@ -1,9 +1,9 @@
 package br.revisaoBackEnd_restful.revisaoRestful.service.exception;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 
-@Data
+@Getter
 @AllArgsConstructor
 public class StandardError {
 
