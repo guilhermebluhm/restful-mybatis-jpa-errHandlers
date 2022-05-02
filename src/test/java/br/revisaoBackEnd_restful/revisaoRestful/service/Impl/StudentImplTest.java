@@ -3,6 +3,7 @@ package br.revisaoBackEnd_restful.revisaoRestful.service.Impl;
 import br.revisaoBackEnd_restful.revisaoRestful.model.Student;
 import br.revisaoBackEnd_restful.revisaoRestful.model.dto.StudentDto;
 import br.revisaoBackEnd_restful.revisaoRestful.repository.StudentRepository;
+import br.revisaoBackEnd_restful.revisaoRestful.repository.mapper.StudentMapper;
 import br.revisaoBackEnd_restful.revisaoRestful.service.exception.ObjectNotFoundError;
 import org.junit.jupiter.api.*;
 import org.mockito.*;
@@ -24,12 +25,13 @@ class StudentImplTest {
     @Mock
     StudentRepository repository;
 
-    List<StudentDto> listStudentDto;
+    @Mock
+    StudentMapper mapper;
 
+    List<StudentDto> listStudentDto;
     Optional<Student> optionalStudent;
     List<Student> listStudent;
     StudentDto modelStudentDto;
-
     Page<Student> page_student;
     Student modelStudent;
 
@@ -50,9 +52,11 @@ class StudentImplTest {
 
         Mockito.when(this.repository.findById(Mockito.anyInt())).thenReturn(optionalStudent);
 
-        StudentDto dto = this.impl.getStudentWithId(Mockito.anyInt());
+        StudentDto dto = this.impl.getStudentWithId(ID);
 
         Assertions.assertNotNull(dto);
+        Assertions.assertEquals(NAME,dto.getName());
+        Assertions.assertEquals(ID,dto.getId());
 
     }
 
@@ -86,7 +90,7 @@ class StudentImplTest {
 
     @Test
     void checkedExistentStudent(){
-        boolean std = this.repository.findById(ID).isPresent();
+        Optional<Student> std = this.repository.findById(ID);
         try{
             Mockito.when(this.impl.checkedExistentStudent(ID))
                     .thenThrow(new ObjectNotFoundError("student doesn't exist"));
@@ -114,6 +118,9 @@ class StudentImplTest {
 
     @Test
     void getAllStudent() {
+        Mockito.when(this.mapper.getAllStudent()).thenReturn(listStudent);
+        List<Student> std = this.impl.getAllStudent();
+        Assertions.assertNotNull(std);
     }
 
     private void initializerComponents(){
