@@ -78,15 +78,23 @@ class StudentImplTest {
     @Test
     void saveNewStudent() {
 
-        Mockito.when(this.repository.findById(Mockito.anyInt())).thenReturn(optionalStudent);
-
         Mockito.when(this.repository.save(modelStudent)).thenReturn(modelStudent);
 
-        StudentDto dto = this.impl.saveNewStudent(modelStudent);
+        this.impl.saveNewStudent(modelStudent);
+
+        try {
+            Mockito.doThrow(new ObjectNotFoundError("error no. registry")).doNothing();
+        }
+        catch (ObjectNotFoundError ex){
+            Assertions.assertEquals(ObjectNotFoundError.class,ex.getClass());
+            Assertions.assertEquals(ex.getMessage(),"error no. registry");
+        }
+
     }
 
     @Test
     void deleteStudent() {
+
     }
 
     @Test

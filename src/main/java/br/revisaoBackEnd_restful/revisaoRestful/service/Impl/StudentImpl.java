@@ -7,7 +7,10 @@ import br.revisaoBackEnd_restful.revisaoRestful.repository.mapper.StudentMapper;
 import br.revisaoBackEnd_restful.revisaoRestful.service.StudentService;
 import br.revisaoBackEnd_restful.revisaoRestful.service.exception.ObjectNotFoundError;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -24,15 +27,16 @@ public class StudentImpl implements StudentService, StudentMapper {
 
 
     @Override
-    public List<StudentDto> listStudents(Pageable page) {
-        return StudentDto.generateListDtoBasedInStudent(this.repository.findAll(page));
-    }
-
-    @Override
     public StudentDto getStudentWithId(int id) {
         Optional<Student> byId = this.repository.findById(id);
         return byId.map(x -> new StudentDto(byId.get()))
                 .orElseThrow(() -> new ObjectNotFoundError("student not found"));
+    }
+
+    @Override
+    public Page<Student> listStudents(int pagina, int tam_pag, String prop) {
+        Pageable pag = PageRequest.of(pagina, tam_pag, Sort.by(prop).descending());
+        return this.repository.findAll(pag);
     }
 
     private boolean checkedExistentStudent(int id){
@@ -46,7 +50,7 @@ public class StudentImpl implements StudentService, StudentMapper {
     protected void validateNoRegistry(Student user){
         Optional<Student> str = this.repository.findByRegistry(user.getRegistry());
         if(str.isPresent()){
-            throw new RuntimeException("registry no accept - No. registry duplicate");
+            throw new ObjectNotFoundError("error no. registry");
         }
     }
 

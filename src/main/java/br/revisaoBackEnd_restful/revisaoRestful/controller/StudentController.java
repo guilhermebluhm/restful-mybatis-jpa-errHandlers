@@ -4,7 +4,7 @@ import br.revisaoBackEnd_restful.revisaoRestful.model.Student;
 import br.revisaoBackEnd_restful.revisaoRestful.model.dto.StudentDto;
 import br.revisaoBackEnd_restful.revisaoRestful.service.Impl.StudentImpl;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,8 +25,11 @@ public class StudentController {
 
     @GetMapping("list-all-using-pagination")
     @ResponseStatus(HttpStatus.OK)
-    public List<StudentDto> getAllUsingDto(Pageable page){
-        return this.impl.listStudents(page);
+    public Page<Student> getAllWithPagination(
+            @RequestParam(required = false, defaultValue = "0") int pagina,
+            @RequestParam(required = false, defaultValue = "1") int tamanhoPagina,
+            @RequestParam(required = false, defaultValue = "name") String ord){
+        return this.impl.listStudents(pagina, tamanhoPagina, ord);
     }
 
     @GetMapping("list-all-using-dto/{id}")
