@@ -90,7 +90,8 @@ class StudentImplTest {
 
     @Test
     void checkedExistentStudent(){
-        Optional<Student> std = this.repository.findById(ID);
+        Mockito.when(this.repository.findById(ID)).thenReturn(Optional.of(modelStudent));
+        Assertions.assertEquals(Optional.of(modelStudent).isPresent(),true);
         try{
             Mockito.when(this.impl.checkedExistentStudent(ID))
                     .thenThrow(new ObjectNotFoundError("student doesn't exist"));
@@ -103,7 +104,7 @@ class StudentImplTest {
     @Test
     void deleteStudent() {
         Mockito.doNothing().when(this.repository).deleteById(ID);
-        this.impl.deleteStudent(ID);
+        this.impl.deleteStudent(modelStudent.getId());
         Mockito.verify(repository,Mockito.times(1)).deleteById(ID);
     }
 

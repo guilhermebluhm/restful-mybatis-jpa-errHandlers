@@ -65,10 +65,10 @@ public class StudentImpl implements StudentService, StudentMapper {
 
     @Override
     public void deleteStudent(int id) {
-        //FIXME encontrar uma estrategia funcional de testes para o if
-        //if(this.checkedExistentStudent(id)){
+
+        if(this.checkedExistentStudent(id)){
             this.repository.deleteById(id);
-        //}
+        }
     }
 
     @Override
