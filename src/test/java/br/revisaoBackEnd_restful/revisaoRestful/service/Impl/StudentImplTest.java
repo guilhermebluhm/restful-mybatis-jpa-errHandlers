@@ -79,7 +79,7 @@ class StudentImplTest {
         this.impl.saveNewStudent(modelStudent);
 
         try {
-            Mockito.doThrow(new ObjectNotFoundError("error no. registry")).doNothing();
+            Mockito.when(this.repository.save(modelStudent)).thenThrow(new ObjectNotFoundError("error no. registry"));
         }
         catch (ObjectNotFoundError ex){
             Assertions.assertEquals(ObjectNotFoundError.class,ex.getClass());

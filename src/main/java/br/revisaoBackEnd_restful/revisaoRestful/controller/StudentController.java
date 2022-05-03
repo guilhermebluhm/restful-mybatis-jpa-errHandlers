@@ -41,7 +41,7 @@ public class StudentController {
     @PostMapping("new-student")
     @ResponseStatus(HttpStatus.CREATED)
     public StudentDto createNewStudent(@RequestBody Student student){
-        return this.createNewStudent(student);
+        return this.impl.saveNewStudent(student);
     }
 
     @DeleteMapping("delete-student/{id}")
