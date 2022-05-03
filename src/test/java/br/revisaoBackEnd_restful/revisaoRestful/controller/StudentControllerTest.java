@@ -51,7 +51,7 @@ class StudentControllerTest {
 
     @Test
     void getAllWithPagination() {
-
+        p_std = this.controller.getAllWithPagination(1,1,"nome");
     }
 
     @Test
@@ -72,6 +72,7 @@ class StudentControllerTest {
 
     @Test
     void updateDataStudent() {
+        dto = this.controller.updateDataStudent(ID,student);
     }
 
     private void initializerModels(){
